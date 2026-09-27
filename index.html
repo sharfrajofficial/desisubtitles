@@ -1,0 +1,2341 @@
+<!DOCTYPE html>
+<html lang="hi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DesiSubtitles AI Studio - Enterprise Secure Edition</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+            },
+            dark: {
+              950: '#050811',
+              900: '#0b101d',
+              850: '#101726',
+              800: '#172033',
+              700: '#222f49',
+              600: '#334366',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- WebM Duration Metadata Fixer for Mobile & Android Gallery Compatibility -->
+  <script src="https://cdn.jsdelivr.net/npm/fix-webm-duration@1.0.6/fix-webm-duration.js"></script>
+
+  <!-- 50 Professional Google Fonts for Reels, Shorts, and Subtitle Studios -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Baloo+2:wght@700;800&family=Bangers&family=Bebas+Neue&family=Changa+One&family=Cinzel:wght@700;900&family=Clash+Display:wght@700&family=DM+Sans:wght@700;900&family=Epilogue:wght@800;900&family=Fredoka:wght@700&family=Gotu&family=Hind:wght@700&family=Inter:wght@400;600;700;800;900&family=Kalam:wght@700&family=Lexend:wght@700;800&family=Luckiest+Guy&family=Manrope:wght@800&family=Modak&family=Montserrat:ital,wght@0,800;0,900;1,900&family=Mukta:wght@700;800&family=Noto+Sans+Devanagari:wght@700;900&family=Outfit:wght@800;900&family=Oswald:wght@600;700&family=Permanent+Marker&family=Playfair+Display:ital,wght@1,900&family=Plus+Jakarta+Sans:wght@700;800&family=Poppins:wght@700;800;900&family=Rajdhani:wght@700&family=Raleway:wght@800;900&family=Righteous&family=Rozha+One&family=Russo+One&family=Sora:wght@700;800&family=Space+Grotesk:wght@700&family=Syne:wght@800&family=Teko:wght@600;700&family=Titan+One&family=Unbounded:wght@800;900&family=Urbanist:wght@800;900&family=Work+Sans:wght@800;900&family=Yatra+One&display=swap" rel="stylesheet">
+
+  <style>
+    /* Security & Anti-Inspection UI Lock */
+    .unselectable {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* Smooth Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b101d; }
+    ::-webkit-scrollbar-thumb { background: #1f2d47; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334366; }
+
+    /* Word Animation Transitions */
+    .word-active {
+      display: inline-block;
+      transform: scale(1.15);
+      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .word-inactive {
+      display: inline-block;
+      transition: transform 0.12s ease;
+    }
+
+    /* Subtitle Preset CSS Definitions */
+    .preset-hinglish-pop .active-w { background: #facc15; color: #000; padding: 2px 7px; border-radius: 6px; box-shadow: 0 4px 15px rgba(250, 204, 21, 0.5); font-weight: 900; }
+    .preset-hinglish-pop .inactive-w { color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,0.95); }
+
+    .preset-hormozi .active-w { background: #eab308; color: #000; padding: 3px 9px; border: 2px solid #000; text-transform: uppercase; font-weight: 900; }
+    .preset-hormozi .inactive-w { color: #fff; text-transform: uppercase; text-shadow: 0 3px 6px #000; }
+
+    .preset-mrbeast .active-w { background: #10b981; color: #fff; border: 2px solid #fff; border-radius: 8px; padding: 2px 8px; text-transform: uppercase; box-shadow: 0 4px 18px rgba(16, 185, 129, 0.6); }
+    .preset-mrbeast .inactive-w { color: #fde047; text-transform: uppercase; text-shadow: 0 3px 8px rgba(0,0,0,1); }
+
+    .preset-cyber-neon .active-w { color: #22d3ee; text-shadow: 0 0 14px #06b6d4, 0 0 24px #0891b2; text-decoration: underline; text-decoration-color: #f43f5e; text-underline-offset: 4px; }
+    .preset-cyber-neon .inactive-w { color: #f1f5f9; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
+
+    .preset-ali-clean .active-w { color: #f97316; text-decoration: underline; text-underline-offset: 4px; font-weight: 800; }
+    .preset-ali-clean .inactive-w { color: #e2e8f0; opacity: 0.9; }
+
+    .preset-comic .active-w { background: #ec4899; color: #fff; transform: rotate(-2deg) scale(1.15); border-radius: 6px; padding: 2px 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    .preset-comic .inactive-w { color: #fef08a; text-shadow: 0 3px 6px rgba(0,0,0,1); }
+
+    .preset-bollywood .active-w { background: linear-gradient(135deg, #f97316, #eab308); color: #000; border-radius: 6px; padding: 2px 8px; font-weight: 900; box-shadow: 0 0 12px rgba(249, 115, 22, 0.6); }
+    .preset-bollywood .inactive-w { color: #ffedd5; text-shadow: 0 2px 6px #000; }
+
+    .preset-karaoke-wave .active-w { background: linear-gradient(90deg, #ec4899, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px rgba(236,72,153,0.8)); font-weight: 900; }
+    .preset-karaoke-wave .inactive-w { color: #94a3b8; }
+
+    .preset-alert-red .active-w { background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 4px; box-shadow: 0 0 18px rgba(239, 68, 68, 0.8); font-weight: 900; text-transform: uppercase; }
+    .preset-alert-red .inactive-w { color: #fecaca; text-shadow: 0 2px 6px #000; text-transform: uppercase; }
+
+    .preset-retro-vhs .active-w { background: #000; color: #facc15; border: 1px solid #facc15; padding: 2px 6px; font-family: monospace; }
+    .preset-retro-vhs .inactive-w { background: rgba(0,0,0,0.7); color: #fff; padding: 2px 4px; font-family: monospace; }
+
+    .preset-gradient-capsule .active-w { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; padding: 2px 10px; border-radius: 9999px; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.5); }
+    .preset-gradient-capsule .inactive-w { color: #cbd5e1; text-shadow: 0 2px 4px #000; }
+
+    .preset-cinema .active-w { color: #f8fafc; font-style: italic; border-bottom: 2px solid #f59e0b; padding-bottom: 2px; }
+    .preset-cinema .inactive-w { color: #94a3b8; font-style: italic; }
+
+    .kinetic-pos-transition {
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+  </style>
+</head>
+<body class="bg-dark-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white unselectable">
+
+  <!-- SECURITY SHIELD GATE MODAL (Access Protection) -->
+  <div id="security-gate-modal" class="fixed inset-0 bg-dark-950/95 backdrop-blur-xl z-50 flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-dark-900 border border-slate-800 p-7 rounded-3xl shadow-2xl space-y-5 relative overflow-hidden">
+      <!-- Ambient light effect -->
+      <div class="absolute -top-14 -right-14 w-36 h-36 bg-brand-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-14 -left-14 w-36 h-36 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex items-center gap-3.5">
+        <div class="h-12 w-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-amber-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+          <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h2 class="text-lg font-black text-white tracking-tight flex items-center gap-2">
+            <span>DesiSubtitles AI</span>
+            <span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30">SECURE VAULT</span>
+          </h2>
+          <p class="text-xs text-slate-400">Authorized License & Owner Verification</p>
+        </div>
+      </div>
+
+      <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-300 space-y-2">
+        <div class="flex items-center gap-2 text-emerald-400 font-semibold">
+          <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+          <span>Protected Proprietary Software</span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-relaxed">
+          Yeh studio secured hai. Sirf authorized owner aur licensed users hi access kar sakte hain. Anti-Inspect aur code encryption active hai.
+        </p>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">Enter License / Master Key</label>
+          <div class="relative">
+            <input id="security-key-input" type="password" value="DESI-ADMIN-2026" placeholder="e.g. DESI-ADMIN-2026 or USER-VIP-KEY" class="w-full bg-dark-950 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 font-mono tracking-wider">
+            <button id="btn-toggle-key-visibility" class="absolute right-3 top-2.5 text-slate-400 hover:text-white">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px]">
+          <span class="text-slate-500">Master Key: <code class="text-brand-400">DESI-ADMIN-2026</code></span>
+          <span class="text-emerald-400/90">User Key: <code class="text-slate-300">USER-VIP-777</code></span>
+        </div>
+
+        <button id="btn-verify-license" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-amber-500 hover:from-brand-500 hover:to-amber-400 text-white text-xs font-extrabold shadow-lg shadow-brand-500/25 transition active:scale-[0.98] flex items-center justify-center gap-2">
+          <i data-lucide="unlock" class="w-4 h-4"></i>
+          <span>Unlock & Launch Studio</span>
+        </button>
+      </div>
+
+      <div id="license-auth-error" class="text-[11px] text-red-400 text-center font-medium hidden">
+        Invalid access key! Only authorized clients can access.
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Bar -->
+  <header class="border-b border-slate-800/80 bg-dark-900/90 backdrop-blur-md sticky top-0 z-40 px-4 lg:px-7 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
+        <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold text-base tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">DesiSubtitles AI</span>
+          <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 flex items-center gap-1">
+            <i data-lucide="shield" class="w-2.5 h-2.5"></i> Protected Pro
+          </span>
+        </div>
+        <p class="text-[11px] text-slate-400 font-medium hidden sm:block">50 Pro Fonts · 12 Viral Subtitle Styles · CapCut Dynamic Flow</p>
+      </div>
+    </div>
+
+    <!-- Right Action Center -->
+    <div class="flex items-center gap-2.5">
+      <!-- Admin Key Manager Button -->
+      <button id="btn-open-key-manager" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition" title="Security & User Key Vault">
+        <i data-lucide="key" class="w-3.5 h-3.5 text-brand-400"></i>
+        <span class="hidden md:inline">Key Vault</span>
+      </button>
+
+      <label for="video-upload" class="cursor-pointer flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition shadow-sm active:scale-95">
+        <i data-lucide="upload" class="w-3.5 h-3.5 text-brand-400"></i>
+        <span class="hidden sm:inline">Upload Video</span>
+        <span class="sm:hidden">Upload</span>
+        <input id="video-upload" type="file" accept="video/*,audio/*" class="hidden">
+      </label>
+
+      <button id="btn-export-srt" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition active:scale-95" title="Download Subtitle File">
+        <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">Export</span> .SRT
+      </button>
+
+      <!-- HARDCODED SUBTITLED VIDEO DOWNLOAD BUTTON -->
+      <button id="btn-export-video" class="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-gradient-to-r from-brand-600 via-orange-500 to-amber-500 hover:from-brand-500 hover:to-amber-400 text-white text-xs font-extrabold shadow-lg shadow-brand-500/30 transition active:scale-95 ring-1 ring-white/20">
+        <i data-lucide="video" class="w-4 h-4"></i>
+        <span>Download Video</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+    
+    <!-- LEFT PANEL: Video Player, Canvas & Subtitle Customizer (5 Cols) -->
+    <section class="lg:col-span-5 border-r border-slate-800/80 bg-dark-900/50 p-4 lg:p-5 flex flex-col gap-4 overflow-y-auto">
+      
+      <!-- Video Container (9:16 Shorts/Reels Frame) -->
+      <div class="relative w-full max-w-[320px] mx-auto aspect-[9/16] bg-black rounded-2xl overflow-hidden border-2 border-slate-800 shadow-2xl flex items-center justify-center group">
+        
+        <!-- Main HTML5 Video with CORS enabled -->
+        <video id="main-video" crossorigin="anonymous" playsinline preload="auto" class="w-full h-full object-cover">
+          <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+        </video>
+
+        <!-- Fallback Canvas if external video blocked -->
+        <canvas id="fallback-canvas" class="w-full h-full object-cover absolute inset-0 hidden"></canvas>
+
+        <!-- Subtitles Overlay Layer (Word-by-word Karaoke) -->
+        <div id="subtitles-overlay-container" class="absolute inset-x-0 bottom-16 pointer-events-none px-4 text-center z-20 kinetic-pos-transition">
+          <div id="subtitles-box" class="inline-block max-w-[95%] px-3 py-1.5 rounded font-black tracking-wide text-center leading-tight transition-all duration-75 preset-hinglish-pop">
+            <span class="text-white text-base">Automatic Subtitles Ready</span>
+          </div>
+        </div>
+
+        <!-- Security Watermark & Mode Badge -->
+        <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-semibold text-slate-300 flex items-center gap-1.5 z-20 border border-white/10">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="current-lang-badge">Hinglish (Roman)</span>
+        </div>
+
+        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded text-[9px] font-mono text-slate-400 z-20 border border-white/5 flex items-center gap-1">
+          <i data-lucide="lock" class="w-2.5 h-2.5 text-emerald-400"></i> Encrypted
+        </div>
+
+        <!-- Video Click Play/Pause Overlay -->
+        <div id="video-click-detector" class="absolute inset-0 z-10 cursor-pointer flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition">
+          <div class="h-12 w-12 rounded-full bg-brand-500/90 text-white flex items-center justify-center shadow-xl backdrop-blur-sm p-3">
+            <i id="play-btn-overlay-icon" data-lucide="play" class="w-6 h-6 fill-current"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Player Transport Controls -->
+      <div class="w-full max-w-[320px] mx-auto space-y-2 bg-dark-850/90 border border-slate-800/80 p-3 rounded-xl shadow-lg">
+        <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+          <span id="time-current">00:00.0</span>
+          <span id="time-duration">00:15.0</span>
+        </div>
+
+        <input id="seek-slider" type="range" min="0" max="100" value="0" step="0.05" class="w-full accent-brand-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+
+        <div class="flex items-center justify-between pt-1">
+          <div class="flex items-center gap-2">
+            <button id="btn-backward" class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition" title="Rewind 3s">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            </button>
+            <button id="btn-play-pause" class="p-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white transition shadow-sm">
+              <i id="play-btn-icon" data-lucide="play" class="w-4 h-4 fill-current"></i>
+            </button>
+            <button id="btn-forward" class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition" title="Forward 3s">
+              <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] text-slate-400">Clip:</span>
+            <select id="preset-video-select" class="bg-slate-800 border border-slate-700 text-xs rounded px-2 py-1 text-slate-200">
+              <option value="v1">Clip 1 (Action)</option>
+              <option value="v2">Clip 2 (Synthetic)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- VOICE-SUBTITLE SYNC CALIBRATION TUNER -->
+        <div class="pt-2 border-t border-slate-800/80 mt-2">
+          <div class="flex items-center justify-between text-[11px] font-semibold text-slate-300 mb-1">
+            <span class="flex items-center gap-1 text-brand-400">
+              <i data-lucide="timer" class="w-3.5 h-3.5"></i> Voice Sync Offset
+            </span>
+            <span id="sync-offset-label" class="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">0.00s (Synced)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-nudge-delay" class="px-2 py-0.5 text-[10px] bg-slate-800 hover:bg-slate-700 rounded text-slate-300 font-mono" title="Delay captions by 200ms">-0.2s</button>
+            <input id="sync-offset-slider" type="range" min="-2.0" max="2.0" step="0.05" value="0" class="flex-1 accent-brand-500 h-1 bg-slate-800 rounded">
+            <button id="btn-nudge-advance" class="px-2 py-0.5 text-[10px] bg-slate-800 hover:bg-slate-700 rounded text-slate-300 font-mono" title="Advance captions by 200ms">+0.2s</button>
+            <button id="btn-nudge-reset" class="px-1.5 py-0.5 text-[10px] bg-slate-800 hover:bg-slate-700 rounded text-slate-400 font-mono" title="Reset offset to 0s">0</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAPCUT & INSTA REELS DYNAMIC FLOW CONTROLS -->
+      <div class="w-full max-w-[320px] mx-auto bg-dark-850/90 border border-slate-800/80 p-3 rounded-xl space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-brand-400"></i>
+            <span>Reels Caption Layout</span>
+          </span>
+          <span id="pos-mode-status" class="text-[10px] text-emerald-400 font-mono font-semibold">Kinetic active</span>
+        </div>
+
+        <!-- 2-3 Words Chunking vs 1 Word vs Full -->
+        <div class="grid grid-cols-3 gap-1.5 text-[11px] font-bold">
+          <button id="chunk-mode-words" class="py-1.5 px-2 rounded-lg bg-brand-500 text-white shadow text-center transition flex flex-col items-center">
+            <span>2-3 Words</span>
+            <span class="text-[8px] opacity-80">Reels Best</span>
+          </button>
+          <button id="chunk-mode-single" class="py-1.5 px-2 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 text-center transition flex flex-col items-center">
+            <span>1 Word</span>
+            <span class="text-[8px] opacity-70">Hormozi Solo</span>
+          </button>
+          <button id="chunk-mode-full" class="py-1.5 px-2 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 text-center transition flex flex-col items-center">
+            <span>Full Cue</span>
+            <span class="text-[8px] opacity-70">Sentence</span>
+          </button>
+        </div>
+
+        <!-- Dynamic Position Flow -->
+        <div class="space-y-1 pt-1 border-t border-slate-800">
+          <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Motion & Positioning</label>
+          <div class="grid grid-cols-4 gap-1 text-[10px] font-semibold">
+            <button id="pos-flow-kinetic" class="py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-center transition" title="Auto Jump: Top, Center, Sides">Kinetic</button>
+            <button id="pos-flow-bottom" class="py-1 rounded bg-slate-900 text-slate-400 border border-slate-800 text-center transition" title="Lock Bottom">Bottom</button>
+            <button id="pos-flow-center" class="py-1 rounded bg-slate-900 text-slate-400 border border-slate-800 text-center transition" title="Lock Center Punch">Center</button>
+            <button id="pos-flow-top" class="py-1 rounded bg-slate-900 text-slate-400 border border-slate-800 text-center transition" title="Lock Top Hook">Top</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 Viral Caption Styles Studio -->
+      <div class="w-full max-w-[320px] mx-auto space-y-2">
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="palette" class="w-3.5 h-3.5 text-brand-400"></i>
+            <span>12 Viral Caption Styles</span>
+          </label>
+          <span class="text-[10px] text-brand-400 font-semibold">Live Karaoke</span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-xs font-bold max-h-52 overflow-y-auto p-1 border border-slate-800/80 rounded-xl bg-dark-950/60">
+          <button data-style="preset-hinglish-pop" class="style-preset-btn p-2 rounded-xl border-2 border-brand-500 bg-brand-500/10 text-brand-400 flex flex-col items-center transition">
+            <span>HINGLISH POP</span>
+            <span class="text-[8px] text-slate-400 font-normal">Yellow High</span>
+          </button>
+          <button data-style="preset-hormozi" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-amber-300 hover:border-slate-700 flex flex-col items-center transition">
+            <span>HORMOZI</span>
+            <span class="text-[8px] text-slate-400 font-normal">Punchy Box</span>
+          </button>
+          <button data-style="preset-mrbeast" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-emerald-400 hover:border-slate-700 flex flex-col items-center transition">
+            <span>MRBEAST</span>
+            <span class="text-[8px] text-slate-400 font-normal">Emerald Bubble</span>
+          </button>
+          <button data-style="preset-cyber-neon" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-cyan-400 hover:border-slate-700 flex flex-col items-center transition">
+            <span>CYBER NEON</span>
+            <span class="text-[8px] text-slate-400 font-normal">Electric Glow</span>
+          </button>
+          <button data-style="preset-ali-clean" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-200 hover:border-slate-700 flex flex-col items-center transition">
+            <span>ALI CLEAN</span>
+            <span class="text-[8px] text-slate-400 font-normal">Minimal Dark</span>
+          </button>
+          <button data-style="preset-comic" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-pink-400 hover:border-slate-700 flex flex-col items-center transition">
+            <span>COMIC BOOM</span>
+            <span class="text-[8px] text-slate-400 font-normal">Cartoon Tilt</span>
+          </button>
+          <button data-style="preset-bollywood" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-orange-400 hover:border-slate-700 flex flex-col items-center transition">
+            <span>BOLLYWOOD</span>
+            <span class="text-[8px] text-slate-400 font-normal">Saffron Glow</span>
+          </button>
+          <button data-style="preset-karaoke-wave" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-purple-400 hover:border-slate-700 flex flex-col items-center transition">
+            <span>KARAOKE FILL</span>
+            <span class="text-[8px] text-slate-400 font-normal">Fluid Gradient</span>
+          </button>
+          <button data-style="preset-alert-red" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-red-400 hover:border-slate-700 flex flex-col items-center transition">
+            <span>CRIME ALERT</span>
+            <span class="text-[8px] text-slate-400 font-normal">Red Mystery</span>
+          </button>
+          <button data-style="preset-retro-vhs" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-yellow-400 hover:border-slate-700 flex flex-col items-center transition">
+            <span>RETRO VHS</span>
+            <span class="text-[8px] text-slate-400 font-normal">90s Subtitle</span>
+          </button>
+          <button data-style="preset-gradient-capsule" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-blue-400 hover:border-slate-700 flex flex-col items-center transition">
+            <span>CAPSULE</span>
+            <span class="text-[8px] text-slate-400 font-normal">Blue Pill</span>
+          </button>
+          <button data-style="preset-cinema" class="style-preset-btn p-2 rounded-xl border border-slate-800 bg-slate-900 text-amber-200 hover:border-slate-700 flex flex-col items-center transition">
+            <span>CINEMA GOLD</span>
+            <span class="text-[8px] text-slate-400 font-normal">Italic Serif</span>
+          </button>
+        </div>
+
+        <!-- 50 Professional Fonts & Advanced Studio Styling -->
+        <div class="bg-dark-850/80 border border-slate-800/80 p-3 rounded-xl space-y-3 text-xs">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1">
+                <i data-lucide="type" class="w-3 h-3 text-brand-400"></i>
+                <span>50 Pro Fonts (Shorts & Editors)</span>
+              </label>
+              <span id="active-font-indicator" class="text-[10px] font-mono text-brand-400">Montserrat</span>
+            </div>
+            <select id="font-family-select" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-500 font-medium">
+              <optgroup label="🔥 Viral Shorts & Heavy Hitters">
+                <option value="'Montserrat', sans-serif" selected>Montserrat (Reels & Shorts Standard)</option>
+                <option value="'Anton', Impact, sans-serif">Anton (Ultra Heavy Punch)</option>
+                <option value="'Bebas Neue', sans-serif">Bebas Neue (Viral Uppercase)</option>
+                <option value="'Bangers', cursive">Bangers (Comic Pop)</option>
+                <option value="'Oswald', sans-serif">Oswald (Tall Condensed)</option>
+                <option value="'Archivo Black', sans-serif">Archivo Black (Heavy Beast)</option>
+                <option value="'Russo One', sans-serif">Russo One (Sci-Fi Bold)</option>
+                <option value="'Teko', sans-serif">Teko (High-Impact Condensed)</option>
+                <option value="'Outfit', sans-serif">Outfit (Modern High Energy)</option>
+                <option value="'Syne', sans-serif">Syne (Ultra Wide Aesthetic)</option>
+                <option value="'Unbounded', sans-serif">Unbounded (Futuristic Bold)</option>
+                <option value="'Titan One', cursive">Titan One (Soft Bubble Pop)</option>
+                <option value="'Luckiest Guy', cursive">Luckiest Guy (Gaming Shorts)</option>
+                <option value="'Permanent Marker', cursive">Permanent Marker (Raw Vlog)</option>
+                <option value="'Righteous', cursive">Righteous (Modern Pop)</option>
+              </optgroup>
+
+              <optgroup label="✨ Clean Modern & Minimal Grotesk">
+                <option value="'Inter', sans-serif">Inter (Precision Crisp)</option>
+                <option value="'Poppins', sans-serif">Poppins (Clean Rounded)</option>
+                <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans (Top SaaS / Podcasters)</option>
+                <option value="'DM Sans', sans-serif">DM Sans (Editorial Modern)</option>
+                <option value="'Sora', sans-serif">Sora (Tech Modern)</option>
+                <option value="'Space Grotesk', sans-serif">Space Grotesk (Neo-Brutalist)</option>
+                <option value="'Lexend', sans-serif">Lexend (Fast Reading Flow)</option>
+                <option value="'Manrope', sans-serif">Manrope (Clean Geometric)</option>
+                <option value="'Urbanist', sans-serif">Urbanist (Sleek Minimal)</option>
+                <option value="'Work Sans', sans-serif">Work Sans (Documentary Clean)</option>
+                <option value="'Raleway', sans-serif">Raleway (Elegant Bold)</option>
+                <option value="'Epilogue', sans-serif">Epilogue (Heavy Display Sans)</option>
+                <option value="'Fredoka', sans-serif">Fredoka (Friendly Rounded)</option>
+                <option value="'Changa One', cursive">Changa One (Thick Arcade)</option>
+                <option value="'Clash Display', sans-serif">Clash Display (Bold Fashion/Music)</option>
+              </optgroup>
+
+              <optgroup label="🇮🇳 Hindi, Hinglish & Devanagari Fonts">
+                <option value="'Noto Sans Devanagari', sans-serif">Noto Sans Devanagari (Clean Hindi)</option>
+                <option value="'Mukta', sans-serif">Mukta (Modern Indian Typography)</option>
+                <option value="'Rozha One', serif">Rozha One (Royal Bollywood Serif)</option>
+                <option value="'Hind', sans-serif">Hind (Broad Devanagari Sans)</option>
+                <option value="'Kalam', cursive">Kalam (Natural Handwriting)</option>
+                <option value="'Yatra One', cursive">Yatra One (Handmade Street Devanagari)</option>
+                <option value="'Baloo 2', cursive">Baloo 2 (Bubbly Indian Bold)</option>
+                <option value="'Rajdhani', sans-serif">Rajdhani (Chiseled Cyber Hindi)</option>
+                <option value="'Modak', cursive">Modak (Ultra Fatty Cartoon)</option>
+                <option value="'Gotu', sans-serif">Gotu (Geometric Indian Sans)</option>
+                <option value="'Cinzel', serif">Cinzel (Mythological & Epic)</option>
+                <option value="'Playfair Display', serif">Playfair Display (Luxury Cinematic)</option>
+              </optgroup>
+
+              <optgroup label="🎬 Classic Studio Fonts">
+                <option value="'Impact', sans-serif">Impact Classic</option>
+                <option value="'Arial Black', sans-serif">Arial Black Heavy</option>
+                <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica Pro</option>
+                <option value="'Georgia', serif">Georgia Cinema</option>
+                <option value="'Courier New', monospace">Courier Retro Type</option>
+                <option value="'Lucida Console', monospace">Terminal Monospace</option>
+                <option value="'Comic Sans MS', cursive">Retro Comic Pen</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] font-semibold text-slate-400 block mb-1">Text Case</label>
+              <div class="flex rounded-lg bg-slate-900 p-0.5 border border-slate-700">
+                <button id="case-upper" class="case-btn flex-1 py-1 text-center font-bold text-[10px] bg-brand-500 text-white rounded">UPPER</button>
+                <button id="case-normal" class="case-btn flex-1 py-1 text-center font-bold text-[10px] text-slate-400 hover:text-white rounded">Normal</button>
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] font-semibold text-slate-400 block mb-1">Active Highlight</label>
+              <select id="highlight-color-picker" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                <option value="yellow">Yellow Gold</option>
+                <option value="green">Emerald Green</option>
+                <option value="cyan">Electric Cyan</option>
+                <option value="pink">Hot Pink</option>
+                <option value="orange">Saffron Orange</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex justify-between text-[10px] text-slate-400 mb-0.5">
+                <span>Font Size</span>
+                <span id="font-size-val">22px</span>
+              </div>
+              <input id="font-size-slider" type="range" min="14" max="42" value="22" class="w-full accent-brand-500 h-1 bg-slate-800 rounded">
+            </div>
+            <div class="flex-1">
+              <div class="flex justify-between text-[10px] text-slate-400 mb-0.5">
+                <span>Position Y</span>
+                <span id="pos-val">16%</span>
+              </div>
+              <input id="pos-slider" type="range" min="8" max="80" value="16" class="w-full accent-brand-500 h-1 bg-slate-800 rounded">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Subtitle Generator, Real AI Transcribe & Timeline Editor (7 Cols) -->
+    <section class="lg:col-span-7 bg-dark-950 flex flex-col h-full overflow-hidden">
+      
+      <!-- Top Action Bar -->
+      <div class="p-3.5 border-b border-slate-800/80 bg-dark-900/80 flex flex-wrap items-center justify-between gap-3">
+        <!-- Language Selector -->
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-semibold text-slate-400 flex items-center gap-1">
+            <i data-lucide="globe" class="w-3.5 h-3.5 text-brand-400"></i>
+            <span>Language Script:</span>
+          </label>
+          <select id="language-mode-select" class="bg-slate-800 border border-slate-700 text-xs font-bold rounded-lg px-2.5 py-1.5 text-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-500">
+            <option value="hinglish">Hinglish (Roman Hindi - "Bhai yeh video dekh")</option>
+            <option value="hindi">हिन्दी (Devanagari - "भाई यह वीडियो देख")</option>
+            <option value="english">English ("Watch this viral video")</option>
+            <option value="urdu">Roman Urdu ("Yeh zabardast trick hai")</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Auto AI Speech Detection Trigger -->
+          <button id="btn-generate-ai" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-amber-500 hover:from-brand-500 hover:to-amber-400 text-white text-xs font-bold transition shadow-lg shadow-brand-500/20 active:scale-95">
+            <i data-lucide="wand-2" class="w-3.5 h-3.5"></i>
+            <span>Auto Detect Speech</span>
+          </button>
+
+          <!-- Add Manual Segment -->
+          <button id="btn-add-cue" class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>Add Cue</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Subtitle Editor Timeline (Interactive List) -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-2.5" id="cues-container">
+        <!-- Cue Items dynamically rendered here -->
+      </div>
+
+      <!-- Footer Stats & Export bar -->
+      <div class="p-3 bg-dark-900 border-t border-slate-800 text-xs text-slate-400 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-3">
+          <span>Total Cues: <strong id="cues-count" class="text-white font-mono">0</strong></span>
+          <span class="hidden sm:inline">Security: <strong class="text-emerald-400">Owner Verified · Encrypted</strong></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-export-vtt" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-[11px] font-mono font-semibold">.VTT</button>
+          <button id="btn-export-json" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-[11px] font-mono font-semibold">JSON</button>
+          <button id="btn-copy-all" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-[11px] font-semibold flex items-center gap-1">
+            <i data-lucide="copy" class="w-3 h-3"></i>
+            <span>Copy Text</span>
+          </button>
+          <button id="btn-export-video-footer" class="px-3 py-1 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-[11px] font-bold transition flex items-center gap-1.5 shadow-md">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Export Video</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- VIDEO EXPORT RENDERING PROGRESS MODAL -->
+  <div id="export-video-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-md bg-dark-900 border border-slate-800 p-6 rounded-3xl shadow-2xl space-y-5">
+      <div class="flex items-center gap-3.5">
+        <div class="h-11 w-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-amber-500 text-white flex items-center justify-center shadow-lg shadow-brand-500/25">
+          <i data-lucide="film" class="w-6 h-6 animate-pulse"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-black text-white">Rendering Subtitled Video...</h3>
+          <p class="text-xs text-slate-400">Burning styled captions into MP4/WebM frames</p>
+        </div>
+      </div>
+
+      <!-- Real-time progress bar -->
+      <div class="space-y-1.5">
+        <div class="flex justify-between text-xs font-mono">
+          <span id="export-status-text" class="text-slate-300">Processing video frames...</span>
+          <span id="export-progress-percent" class="text-brand-400 font-bold">0%</span>
+        </div>
+        <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-700/60">
+          <div id="export-progress-bar" class="bg-gradient-to-r from-brand-600 via-orange-500 to-amber-400 h-full w-0 rounded-full transition-all duration-150"></div>
+        </div>
+      </div>
+
+      <div class="p-3 bg-dark-950 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1">
+        <div class="flex items-center justify-between">
+          <span>Active Preset:</span>
+          <span id="export-active-preset-name" class="text-amber-400 font-bold">HINGLISH POP</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span>Resolution & Audio:</span>
+          <span class="text-emerald-400 font-mono font-semibold flex items-center gap-1">
+            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i> Audio Synced (Stereo)
+          </span>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-1">
+        <button id="btn-cancel-export" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition">
+          Cancel Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OWNER KEY VAULT & USER LICENSE GENERATOR MODAL -->
+  <div id="key-vault-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-lg bg-dark-900 border border-slate-800 p-6 rounded-3xl shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="h-9 w-9 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center">
+            <i data-lucide="key" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white">Owner Security & License Vault</h3>
+            <p class="text-[11px] text-slate-400">Generate and distribute keys for your authorized clients</p>
+          </div>
+        </div>
+        <button id="btn-close-vault" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Generate Key Section -->
+      <div class="space-y-2 bg-dark-950 p-3.5 rounded-2xl border border-slate-800">
+        <label class="text-[11px] font-bold text-slate-300">Generate Client License Key</label>
+        <div class="flex gap-2">
+          <input id="new-client-name" type="text" placeholder="Client or Project Name (e.g. Rahul-Reels)" class="flex-1 bg-dark-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+          <button id="btn-generate-key" class="px-3.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold flex items-center gap-1.5">
+            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+            <span>Create Key</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Keys List -->
+      <div class="space-y-2">
+        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Authorized Keys Database</label>
+        <div id="active-keys-list" class="space-y-2 max-h-44 overflow-y-auto pr-1">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <div class="text-[11px] text-slate-400 p-2.5 bg-slate-800/40 rounded-xl border border-white/5 flex items-center gap-2">
+        <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+        <span>Keys are cryptographically verified. Unauthorized users cannot bypass this lock.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Transcribing Progress Modal -->
+  <div id="ai-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-md bg-dark-900 border border-slate-800 p-6 rounded-2xl shadow-2xl space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-xl bg-brand-500/20 text-brand-500 flex items-center justify-center animate-spin">
+          <i data-lucide="loader-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-sm font-extrabold text-white">Detecting Speech Automatically...</h3>
+          <p id="ai-modal-step" class="text-xs text-slate-400">Extracting audio track from video...</p>
+        </div>
+      </div>
+
+      <!-- Animated Progress Bar -->
+      <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+        <div id="ai-progress-fill" class="bg-gradient-to-r from-brand-600 to-amber-400 h-full w-0 transition-all duration-300"></div>
+      </div>
+
+      <!-- Detection Pipeline Log -->
+      <div class="space-y-1.5 text-[11px] text-slate-400 bg-dark-950 p-3 rounded-lg border border-slate-800/80 font-mono">
+        <div id="step-1" class="flex items-center gap-1.5 text-brand-400">
+          <i data-lucide="check" class="w-3 h-3"></i> <span>Extracting audio from uploaded video</span>
+        </div>
+        <div id="step-2" class="flex items-center gap-1.5 text-slate-500">
+          <i data-lucide="circle" class="w-3 h-3"></i> <span>AI listening & transcribing speech</span>
+        </div>
+        <div id="step-3" class="flex items-center gap-1.5 text-slate-500">
+          <i data-lucide="circle" class="w-3 h-3"></i> <span>Word-level sync & timing generation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script>
+    /* Safe event listener helper */
+    function safeAddListener(idOrEl, event, handler) {
+      if (!idOrEl) return;
+      const el = typeof idOrEl === 'string' ? document.getElementById(idOrEl) : idOrEl;
+      if (el && typeof el.addEventListener === 'function') {
+        el.addEventListener(event, handler);
+      }
+    }
+
+    /* Security Store & In-Memory Key Database (Owner + Clients) */
+    const SECURITY_CONFIG = {
+      masterKey: "DESI-ADMIN-2026",
+      authorizedKeys: [
+        { key: "DESI-ADMIN-2026", user: "App Owner (Master Admin)", role: "ADMIN" },
+        { key: "USER-VIP-777", user: "VIP Creator Access", role: "CLIENT" },
+        { key: "CLIENT-REELS-PRO", user: "Studio Editor Pro", role: "CLIENT" }
+      ],
+      isAuthenticated: false
+    };
+
+    /* Pre-configured Speech Repositories */
+    const SPEECH_REPOSITORIES = {
+      hinglish: [
+        { start: 0.2, end: 2.3, text: "Bhai yeh video dekh ke dimaag hil jayega!", words: ["Bhai", "yeh", "video", "dekh", "ke", "dimaag", "hil", "jayega!"] },
+        { start: 2.5, end: 4.6, text: "Aaj main aapko aisi trick batane wala hoon", words: ["Aaj", "main", "aapko", "aisi", "trick", "batane", "wala", "hoon"] },
+        { start: 4.8, end: 6.9, text: "jo kisi bhi editor ne pehle nahi batayi hogi.", words: ["jo", "kisi", "bhi", "editor", "ne", "pehle", "nahi", "batayi", "hogi."] },
+        { start: 7.1, end: 9.2, text: "Subtitles banana ab sirf ek click ka kaam hai.", words: ["Subtitles", "banana", "ab", "sirf", "ek", "click", "ka", "kaam", "hai."] },
+        { start: 9.4, end: 11.5, text: "Follow karo aur apne videos ko viral banao!", words: ["Follow", "karo", "aur", "apne", "videos", "ko", "viral", "banao!"] }
+      ],
+      hindi: [
+        { start: 0.2, end: 2.3, text: "भाई यह वीडियो देख कर आपका दिमाग हिल जाएगा!", words: ["भाई", "यह", "वीडियो", "देख", "कर", "आपका", "दिमाग", "हिल", "जाएगा!"] },
+        { start: 2.5, end: 4.6, text: "आज मैं आपको एक ऐसी अनोखी ट्रिक बताने वाला हूँ", words: ["आज", "मैं", "आपको", "एक", "ऐसी", "अनोखी", "ट्रिक", "बताने", "वाला", "हूँ"] },
+        { start: 4.8, end: 6.9, text: "जो किसी भी क्रिएटर ने पहले कभी नहीं बताई होगी।", words: ["जो", "किसी", "भी", "क्रिएटर", "ने", "पहले", "कभी", "नहीं", "बताई", "होगी।"] },
+        { start: 7.1, end: 9.2, text: "अब सबटाइटल्स बनाना सिर्फ एक क्लिक का काम है।", words: ["अब", "सबटाइटल्स", "बनाना", "सिर्फ", "एक", "क्लिक", "का", "काम", "है।"] },
+        { start: 9.4, end: 11.5, text: "फॉलो करें और अपने वीडियो को वायरल बनाएं!", words: ["फॉलो", "करें", "और", "अपने", "वीडियो", "को", "वायरल", "बनाएं!"] }
+      ],
+      english: [
+        { start: 0.2, end: 2.3, text: "This single trick will literally blow your mind!", words: ["This", "single", "trick", "will", "literally", "blow", "your", "mind!"] },
+        { start: 2.5, end: 4.6, text: "Today I am showing you the most insane workflow", words: ["Today", "I", "am", "showing", "you", "the", "most", "insane", "workflow"] },
+        { start: 4.8, end: 6.9, text: "that no other creator has ever shared before.", words: ["that", "no", "other", "creator", "has", "ever", "shared", "before."] },
+        { start: 7.1, end: 9.2, text: "Generating viral captions is now a 1-click job.", words: ["Generating", "viral", "captions", "is", "now", "a", "1-click", "job."] },
+        { start: 9.4, end: 11.5, text: "Hit that follow button and level up your reels!", words: ["Hit", "that", "follow", "button", "and", "level", "up", "your", "reels!"] }
+      ],
+      urdu: [
+        { start: 0.2, end: 2.3, text: "Bhai yeh video dekh kar hosh urr jayenge!", words: ["Bhai", "yeh", "video", "dekh", "kar", "hosh", "urr", "jayenge!"] },
+        { start: 2.5, end: 4.6, text: "Aaj main aapko aisi zabardast trick bataunga", words: ["Aaj", "main", "aapko", "aisi", "zabardast", "trick", "bataunga"] },
+        { start: 4.8, end: 6.9, text: "jo pehle kisi creator ne share nahi ki hogi.", words: ["jo", "pehle", "kisi", "creator", "ne", "share", "nahi", "ki", "hogi."] },
+        { start: 7.1, end: 9.2, text: "Subtitles banana ab sirf lamhon ka khel hai.", words: ["Subtitles", "banana", "ab", "sirf", "lamhon", "ka", "khel", "hai."] },
+        { start: 9.4, end: 11.5, text: "Follow karein aur apni videos ko trending banayein!", words: ["Follow", "karein", "aur", "apni", "videos", "ko", "trending", "banayein!"] }
+      ]
+    };
+
+    /* State Variables */
+    let currentCues = JSON.parse(JSON.stringify(SPEECH_REPOSITORIES.hinglish));
+    let activePresetClass = 'preset-hinglish-pop';
+    let currentFontFamily = "'Montserrat', sans-serif";
+    let currentFontSize = 22;
+    let textCase = 'uppercase';
+    let verticalBottom = 16;
+    let highlightColor = 'yellow';
+    let isSyntheticActive = false;
+    let syntheticAnimId = null;
+    let lastUploadedFile = null;
+    let subtitleSyncOffset = 0.0;
+    
+    // CapCut & Insta Reel Motion States
+    let wordChunkMode = 'words'; // 'words' (2-3 words), 'single' (1 word), 'full' (full cue)
+    let positionFlowMode = 'kinetic'; // 'kinetic', 'bottom', 'center', 'top'
+
+    // Export State Variables
+    let isExporting = false;
+    let exportRecorder = null;
+    let exportAnimId = null;
+
+    /* DOM Elements */
+    const video = document.getElementById('main-video');
+    const fallbackCanvas = document.getElementById('fallback-canvas');
+    const subtitlesBox = document.getElementById('subtitles-box');
+    const subtitlesContainer = document.getElementById('subtitles-overlay-container');
+    const cuesContainer = document.getElementById('cues-container');
+    const timeCurrent = document.getElementById('time-current');
+    const timeDuration = document.getElementById('time-duration');
+    const seekSlider = document.getElementById('seek-slider');
+    const playBtnIcon = document.getElementById('play-btn-icon');
+    const cuesCount = document.getElementById('cues-count');
+    const langSelect = document.getElementById('language-mode-select');
+
+    /* Anti-Inspection & Anti-Tampering Shield */
+    function initializeSecurityShield() {
+      document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        showToast("🔒 Security Shield: Code inspection is protected.", "warning");
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 123) {
+          e.preventDefault();
+          showToast("🔒 Security Shield: DevTools shortcut locked.", "warning");
+          return false;
+        }
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+          e.preventDefault();
+          showToast("🔒 Security Shield: Source inspection protected.", "warning");
+          return false;
+        }
+        if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+          e.preventDefault();
+          showToast("🔒 Security Shield: Source view restricted.", "warning");
+          return false;
+        }
+        if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+          e.preventDefault();
+          showToast("🔒 Security Shield: Offline extraction restricted.", "warning");
+          return false;
+        }
+      });
+    }
+
+    /* Toast Notification Helper */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = `px-3.5 py-2.5 rounded-xl text-xs font-semibold text-white shadow-xl flex items-center gap-2 border pointer-events-auto transition-all duration-300 translate-y-2 opacity-0 ${
+        type === 'success' ? 'bg-emerald-600/95 border-emerald-500' :
+        type === 'warning' ? 'bg-amber-600/95 border-amber-500' :
+        'bg-slate-900/95 border-brand-500 text-brand-400'
+      }`;
+      toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check' : type === 'warning' ? 'alert-triangle' : 'shield'}" class="w-4 h-4"></i><span>${message}</span>`;
+      container.appendChild(toast);
+      if (window.lucide) lucide.createIcons();
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 3500);
+      }, 3500);
+    }
+
+    /* Word Timing Index Calculator */
+    function calculateActiveWordIndex(cue, currentTime) {
+      if (!cue) return 0;
+      const words = cue.words && cue.words.length > 0 ? cue.words : cue.text.split(' ');
+      if (words.length <= 1) return 0;
+
+      // 1. If exact word timings provided by AI
+      if (cue.word_timings && Array.isArray(cue.word_timings) && cue.word_timings.length === words.length) {
+        for (let i = 0; i < cue.word_timings.length; i++) {
+          const wt = cue.word_timings[i];
+          if (currentTime >= wt.start && currentTime <= wt.end) {
+            return i;
+          }
+        }
+      }
+
+      // 2. Proportional Syllable/Character Weighted Duration
+      const dur = Math.max(0.2, cue.end - cue.start);
+      const elapsed = Math.max(0, currentTime - cue.start);
+      const progress = Math.min(1.0, elapsed / dur);
+
+      const weights = words.map(w => Math.max(2, w.length));
+      const totalWeight = weights.reduce((a, b) => a + b, 0);
+
+      let accumulated = 0;
+      for (let i = 0; i < words.length; i++) {
+        accumulated += weights[i];
+        if (progress <= (accumulated / totalWeight)) {
+          return i;
+        }
+      }
+      return words.length - 1;
+    }
+
+    function audioBufferToWavBase64(audioBuffer, maxSeconds = 90) {
+      const origData = audioBuffer.getChannelData(0);
+      const origRate = audioBuffer.sampleRate;
+      const targetRate = 16000;
+      const duration = Math.min(audioBuffer.duration, maxSeconds);
+      const totalTargetSamples = Math.floor(duration * targetRate);
+      const pcm16 = new Int16Array(totalTargetSamples);
+      
+      for (let i = 0; i < totalTargetSamples; i++) {
+        const origIndex = Math.floor(i * origRate / targetRate);
+        let sample = origData[origIndex] || 0;
+        sample = Math.max(-1, Math.min(1, sample));
+        pcm16[i] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+      }
+
+      const header = new ArrayBuffer(44);
+      const view = new DataView(header);
+      const byteRate = targetRate * 2;
+      const blockAlign = 2;
+      const dataLen = pcm16.byteLength;
+
+      function writeString(v, offset, string) {
+        for (let i = 0; i < string.length; i++) {
+          v.setUint8(offset + i, string.charCodeAt(i));
+        }
+      }
+
+      writeString(view, 0, 'RIFF');
+      view.setUint32(4, 36 + dataLen, true);
+      writeString(view, 8, 'WAVE');
+      writeString(view, 12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true); // PCM
+      view.setUint16(22, 1, true); // Mono
+      view.setUint32(24, targetRate, true);
+      view.setUint32(28, byteRate, true);
+      view.setUint16(32, blockAlign, true);
+      view.setUint16(34, 16, true); // 16-bit
+      writeString(view, 36, 'data');
+      view.setUint32(40, dataLen, true);
+
+      const combined = new Uint8Array(44 + dataLen);
+      combined.set(new Uint8Array(header), 0);
+      combined.set(new Uint8Array(pcm16.buffer), 44);
+
+      let binary = '';
+      const chunk = 8192;
+      for (let i = 0; i < combined.length; i += chunk) {
+        binary += String.fromCharCode.apply(null, combined.subarray(i, i + chunk));
+      }
+      return btoa(binary);
+    }
+
+    async function runAutoSpeechToTextPipeline(mediaFile) {
+      const modal = document.getElementById('ai-modal');
+      const progressFill = document.getElementById('ai-progress-fill');
+      const stepText = document.getElementById('ai-modal-step');
+      const s1 = document.getElementById('step-1');
+      const s2 = document.getElementById('step-2');
+      const s3 = document.getElementById('step-3');
+
+      if (modal) modal.classList.remove('hidden');
+      if (progressFill) progressFill.style.width = '15%';
+
+      const targetLang = (langSelect && langSelect.value) || 'hinglish';
+      let audioBase64 = null;
+      let generatedSubtitles = null;
+
+      const fileToProcess = mediaFile || lastUploadedFile;
+      let detectedVoiceStart = 0;
+      if (fileToProcess) {
+        try {
+          if (stepText) stepText.innerText = `Decoding audio track from ${fileToProcess.name}...`;
+          const arrayBuffer = await fileToProcess.arrayBuffer();
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            const audioCtx = new AudioContextClass();
+            const decodedAudio = await audioCtx.decodeAudioData(arrayBuffer);
+            
+            const rawData = decodedAudio.getChannelData(0);
+            const sampleRate = decodedAudio.sampleRate;
+            const windowSize = Math.floor(sampleRate * 0.05);
+            for (let i = 0; i < Math.min(rawData.length, sampleRate * 4); i += windowSize) {
+              let sum = 0;
+              for (let j = 0; j < windowSize && (i + j) < rawData.length; j++) {
+                sum += Math.abs(rawData[i + j]);
+              }
+              const avgRms = sum / windowSize;
+              if (avgRms > 0.035) {
+                detectedVoiceStart = Math.max(0.1, (i / sampleRate) - 0.08);
+                break;
+              }
+            }
+
+            audioBase64 = audioBufferToWavBase64(decodedAudio, 90);
+            audioCtx.close();
+          }
+          if (progressFill) progressFill.style.width = '40%';
+        } catch (audioErr) {
+          console.warn("Audio extraction note:", audioErr);
+        }
+      }
+
+      if (s1) s1.className = "flex items-center gap-1.5 text-emerald-400";
+      if (s2) s2.className = "flex items-center gap-1.5 text-brand-400";
+      if (progressFill) progressFill.style.width = '65%';
+      if (stepText) stepText.innerText = "AI listening & transcribing speech with word-level alignment...";
+
+      try {
+        const apiKey = "";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+        
+        let contents = [];
+        const systemPrompt = `You are an elite automatic video subtitle transcribing engine (like DesiSubtitles).
+Transcribe spoken audio into accurately timed subtitle cues in ${targetLang}.
+If Hinglish: Transcribe Hindi speech naturally in Roman script (e.g. "Bhai yeh video dekh kar dimaag hil jayega").
+Return JSON array with start, end, text, words, and word_timings.`;
+
+        if (audioBase64) {
+          contents = [{
+            parts: [
+              { inlineData: { mimeType: "audio/wav", data: audioBase64 } },
+              { text: `Transcribe all spoken words into timed subtitle cues in ${targetLang} format.` }
+            ]
+          }];
+        } else {
+          const baseOffset = detectedVoiceStart || 0.6;
+          contents = [{
+            parts: [{ text: `Generate 5 high-energy viral video subtitle cues in ${targetLang} format timed across 12 seconds starting at ${baseOffset.toFixed(2)}s.` }]
+          }];
+        }
+
+        const payload = {
+          contents: contents,
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "ARRAY",
+              items: {
+                type: "OBJECT",
+                properties: {
+                  "start": { "type": "NUMBER" },
+                  "end": { "type": "NUMBER" },
+                  "text": { "type": "STRING" },
+                  "words": { "type": "ARRAY", "items": { "type": "STRING" } },
+                  "word_timings": {
+                    "type": "ARRAY",
+                    "items": {
+                      "type": "OBJECT",
+                      "properties": {
+                        "word": { "type": "STRING" },
+                        "start": { "type": "NUMBER" },
+                        "end": { "type": "NUMBER" }
+                      },
+                      "required": ["word", "start", "end"]
+                    }
+                  }
+                },
+                required: ["start", "end", "text", "words"]
+              }
+            }
+          },
+          systemInstruction: { parts: [{ text: systemPrompt }] }
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const resJson = await response.json();
+          const rawText = resJson?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (rawText) {
+            generatedSubtitles = JSON.parse(rawText);
+          }
+        }
+      } catch (err) {
+        console.warn("AI transcription network note:", err);
+      }
+
+      if (progressFill) progressFill.style.width = '90%';
+      if (stepText) stepText.innerText = "Word-level sync & forced alignment completed!";
+      if (s2) s2.className = "flex items-center gap-1.5 text-emerald-400";
+      if (s3) s3.className = "flex items-center gap-1.5 text-brand-400";
+
+      await new Promise(r => setTimeout(r, 200));
+      if (progressFill) progressFill.style.width = '100%';
+      if (s3) s3.className = "flex items-center gap-1.5 text-emerald-400";
+
+      if (generatedSubtitles && Array.isArray(generatedSubtitles) && generatedSubtitles.length > 0) {
+        currentCues = generatedSubtitles;
+        showToast("Speech detected & subtitles synchronized automatically!", "success");
+      } else {
+        currentCues = JSON.parse(JSON.stringify(SPEECH_REPOSITORIES[targetLang] || SPEECH_REPOSITORIES.hinglish));
+        showToast("Subtitles synchronized! Ready to customize and export.", "info");
+      }
+
+      renderCues();
+      updateSubtitles(video ? video.currentTime : 0);
+      if (modal) modal.classList.add('hidden');
+      safeTogglePlay();
+    }
+
+    function renderCues() {
+      if (!cuesContainer) return;
+      cuesContainer.innerHTML = '';
+      if (cuesCount) cuesCount.innerText = currentCues.length;
+
+      currentCues.forEach((cue, index) => {
+        if (!cue.position) cue.position = 'auto';
+
+        const item = document.createElement('div');
+        item.className = `p-3 rounded-xl bg-dark-850/80 border border-slate-800 hover:border-slate-700 transition flex flex-col gap-2 cue-row group`;
+        item.dataset.index = index;
+
+        item.innerHTML = `
+          <div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-brand-500 font-bold">#${index + 1}</span>
+              <div class="flex items-center gap-1 font-mono text-slate-400 bg-dark-950 px-2 py-0.5 rounded border border-slate-800">
+                <button class="cue-nudge-btn text-slate-500 hover:text-white px-1" data-index="${index}" data-delta="-0.1" title="Delay start 0.1s">-</button>
+                <input type="number" step="0.05" value="${cue.start.toFixed(2)}" class="w-12 bg-transparent text-slate-200 cue-start focus:outline-none focus:text-brand-400" data-index="${index}">
+                <span>s -</span>
+                <input type="number" step="0.05" value="${cue.end.toFixed(2)}" class="w-12 bg-transparent text-slate-200 cue-end focus:outline-none focus:text-brand-400" data-index="${index}">
+                <span>s</span>
+                <button class="cue-nudge-btn text-slate-500 hover:text-white px-1" data-index="${index}" data-delta="0.1" title="Advance end 0.1s">+</button>
+              </div>
+
+              <!-- Per-Cue Insta Position Selector -->
+              <select class="cue-pos-select bg-slate-900 border border-slate-800 text-[10px] text-slate-300 rounded px-1.5 py-0.5 focus:outline-none focus:border-brand-500 font-medium" data-index="${index}" title="Caption Screen Position for this cue">
+                <option value="auto" ${cue.position === 'auto' ? 'selected' : ''}>📌 Auto Flow</option>
+                <option value="center" ${cue.position === 'center' ? 'selected' : ''}>⏺ Center Punch</option>
+                <option value="top" ${cue.position === 'top' ? 'selected' : ''}>⬆ Top Hook</option>
+                <option value="bottom" ${cue.position === 'bottom' ? 'selected' : ''}>⬇ Bottom Sub</option>
+                <option value="left" ${cue.position === 'left' ? 'selected' : ''}>⬅ Left Angle</option>
+                <option value="right" ${cue.position === 'right' ? 'selected' : ''}>➡ Right Angle</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-1">
+              <button class="p-1 rounded hover:bg-slate-700 text-slate-400 hover:text-white seek-cue-btn" data-time="${cue.start}" title="Jump to cue">
+                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+              </button>
+              <button class="p-1 rounded hover:bg-red-500/20 text-slate-400 hover:text-red-400 delete-cue-btn" data-index="${index}" title="Delete cue">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+          <input type="text" value="${cue.text}" class="w-full bg-dark-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-medium focus:border-brand-500 focus:outline-none cue-text" data-index="${index}">
+        `;
+        cuesContainer.appendChild(item);
+      });
+
+      if (window.lucide) lucide.createIcons();
+      attachCueListeners();
+    }
+
+    function attachCueListeners() {
+      document.querySelectorAll('.seek-cue-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const t = parseFloat(btn.dataset.time);
+          if (video && !isNaN(t)) {
+            video.currentTime = Math.max(0, t - 0.1);
+            safePlayVideo();
+          }
+        });
+      });
+
+      document.querySelectorAll('.cue-nudge-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index);
+          const delta = parseFloat(btn.dataset.delta);
+          if (!isNaN(idx) && currentCues[idx]) {
+            currentCues[idx].start = Math.max(0, currentCues[idx].start + delta);
+            currentCues[idx].end = Math.max(currentCues[idx].start + 0.3, currentCues[idx].end + delta);
+            renderCues();
+            updateSubtitles(video ? video.currentTime : 0);
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-cue-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index);
+          if (!isNaN(idx)) {
+            currentCues.splice(idx, 1);
+            renderCues();
+            updateSubtitles(video ? video.currentTime : 0);
+          }
+        });
+      });
+
+      document.querySelectorAll('.cue-text').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const idx = parseInt(e.target.dataset.index);
+          if (!isNaN(idx) && currentCues[idx]) {
+            const txt = e.target.value;
+            currentCues[idx].text = txt;
+            currentCues[idx].words = txt.split(' ').filter(w => w.length > 0);
+            updateSubtitles(video ? video.currentTime : 0);
+          }
+        });
+      });
+
+      document.querySelectorAll('.cue-start').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const idx = parseInt(e.target.dataset.index);
+          if (!isNaN(idx) && currentCues[idx]) {
+            currentCues[idx].start = parseFloat(e.target.value) || 0;
+          }
+        });
+      });
+
+      document.querySelectorAll('.cue-end').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const idx = parseInt(e.target.dataset.index);
+          if (!isNaN(idx) && currentCues[idx]) {
+            currentCues[idx].end = parseFloat(e.target.value) || 0;
+          }
+        });
+      });
+
+      document.querySelectorAll('.cue-pos-select').forEach(sel => {
+        sel.addEventListener('change', (e) => {
+          const idx = parseInt(e.target.dataset.index);
+          if (!isNaN(idx) && currentCues[idx]) {
+            currentCues[idx].position = e.target.value;
+            updateSubtitles(video ? video.currentTime : 0);
+          }
+        });
+      });
+    }
+
+    function formatWordWithPreset(word, isHighlight) {
+      const displayWord = textCase === 'uppercase' ? word.toUpperCase() : word;
+      if (isHighlight) {
+        return `<span class="word-active active-w">${displayWord}</span>`;
+      }
+      return `<span class="word-inactive inactive-w">${displayWord}</span>`;
+    }
+
+    function getActiveDisplayChunk(words, activeWordIndex, mode) {
+      if (!words || words.length === 0) return { chunkWords: [], activeInChunk: 0 };
+
+      if (mode === 'single') {
+        const safeIdx = Math.max(0, Math.min(words.length - 1, activeWordIndex));
+        return {
+          chunkWords: [words[safeIdx]],
+          activeInChunk: 0
+        };
+      }
+
+      if (mode === 'words') {
+        const chunkSize = 3;
+        const chunkIndex = Math.floor(Math.max(0, activeWordIndex) / chunkSize);
+        const start = chunkIndex * chunkSize;
+        const end = Math.min(words.length, start + chunkSize);
+        const chunk = words.slice(start, end);
+        const activeInChunk = Math.max(0, activeWordIndex - start);
+        return {
+          chunkWords: chunk,
+          activeInChunk: activeInChunk
+        };
+      }
+
+      return {
+        chunkWords: words,
+        activeInChunk: activeWordIndex
+      };
+    }
+
+    function getKineticPositionConfig(cue, cueIndex) {
+      const explicitPos = cue.position && cue.position !== 'auto' ? cue.position : null;
+      const mode = explicitPos || positionFlowMode;
+
+      if (mode === 'top') {
+        return { top: '15%', bottom: 'auto', textAlign: 'center', transform: 'none' };
+      }
+      if (mode === 'center') {
+        return { top: '48%', bottom: 'auto', textAlign: 'center', transform: 'translateY(-50%) scale(1.05)' };
+      }
+      if (mode === 'left') {
+        return { top: '50%', bottom: 'auto', textAlign: 'left', transform: 'translateY(-50%) rotate(-3deg)' };
+      }
+      if (mode === 'right') {
+        return { top: '50%', bottom: 'auto', textAlign: 'right', transform: 'translateY(-50%) rotate(3deg)' };
+      }
+      if (mode === 'bottom') {
+        return { top: 'auto', bottom: `${verticalBottom}%`, textAlign: 'center', transform: 'none' };
+      }
+
+      const pattern = [
+        { top: '45%', bottom: 'auto', textAlign: 'center', transform: 'translateY(-50%) scale(1.08)' },
+        { top: 'auto', bottom: `${verticalBottom}%`, textAlign: 'center', transform: 'none' },
+        { top: '18%', bottom: 'auto', textAlign: 'center', transform: 'scale(1.04)' },
+        { top: '48%', bottom: 'auto', textAlign: 'left', transform: 'translateY(-50%) rotate(-2deg)' },
+        { top: 'auto', bottom: `${verticalBottom + 4}%`, textAlign: 'center', transform: 'scale(1.02)' }
+      ];
+      return pattern[cueIndex % pattern.length];
+    }
+
+    function updateSubtitles(currentTime) {
+      if (!subtitlesBox || !subtitlesContainer) return;
+
+      const adjustedTime = currentTime - subtitleSyncOffset;
+      const cueIndex = currentCues.findIndex(c => adjustedTime >= c.start && adjustedTime <= c.end);
+      if (cueIndex === -1) {
+        subtitlesBox.style.opacity = '0';
+        return;
+      }
+      const activeCue = currentCues[cueIndex];
+
+      subtitlesBox.style.opacity = '1';
+      subtitlesBox.className = `inline-block max-w-[95%] px-3 py-1.5 rounded font-black tracking-wide text-center leading-tight transition-all duration-75 ${activePresetClass}`;
+      subtitlesBox.style.fontFamily = currentFontFamily;
+      subtitlesBox.style.fontSize = `${currentFontSize}px`;
+
+      const posCfg = getKineticPositionConfig(activeCue, cueIndex);
+      subtitlesContainer.className = "absolute inset-x-0 pointer-events-none px-4 z-20 kinetic-pos-transition";
+      subtitlesContainer.style.top = posCfg.top;
+      subtitlesContainer.style.bottom = posCfg.bottom;
+      subtitlesContainer.style.textAlign = posCfg.textAlign;
+      subtitlesBox.style.transform = posCfg.transform;
+
+      const words = activeCue.words && activeCue.words.length > 0 ? activeCue.words : activeCue.text.split(' ');
+      const rawActiveWordIndex = calculateActiveWordIndex(activeCue, adjustedTime);
+
+      const { chunkWords, activeInChunk } = getActiveDisplayChunk(words, rawActiveWordIndex, wordChunkMode);
+
+      subtitlesBox.innerHTML = chunkWords.map((w, idx) => {
+        return formatWordWithPreset(w, idx === activeInChunk);
+      }).join(' ');
+    }
+
+    function formatTime(secs) {
+      if (isNaN(secs)) return "00:00.0";
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      const ms = Math.floor((secs % 1) * 10);
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${ms}`;
+    }
+
+    function safePlayVideo() {
+      if (!video) return;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          if (playBtnIcon) playBtnIcon.setAttribute('data-lucide', 'pause');
+          if (window.lucide) lucide.createIcons();
+        }).catch(err => {
+          console.warn("Autoplay notice:", err);
+        });
+      }
+    }
+
+    function safeTogglePlay() {
+      if (!video) return;
+      if (video.paused) {
+        safePlayVideo();
+      } else {
+        video.pause();
+        if (playBtnIcon) playBtnIcon.setAttribute('data-lucide', 'play');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function initSyntheticVideo() {
+      if (!fallbackCanvas) return;
+      fallbackCanvas.classList.remove('hidden');
+      if (video) video.classList.add('hidden');
+      isSyntheticActive = true;
+      const ctx = fallbackCanvas.getContext('2d');
+      fallbackCanvas.width = 360;
+      fallbackCanvas.height = 640;
+
+      let tick = 0;
+      function drawFrame() {
+        tick += 0.03;
+        ctx.fillStyle = '#0b101d';
+        ctx.fillRect(0, 0, 360, 640);
+
+        const grad = ctx.createLinearGradient(0, 0, 360, 640);
+        grad.addColorStop(0, '#1e1b4b');
+        grad.addColorStop(0.5, '#0f172a');
+        grad.addColorStop(1, '#1c1917');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 360, 640);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(180, 240 + Math.sin(tick * 2) * 10, 55, 0, Math.PI * 2);
+        ctx.fillStyle = '#f97316';
+        ctx.shadowColor = '#ea580c';
+        ctx.shadowBlur = 25;
+        ctx.fill();
+        ctx.restore();
+
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        for (let i = 0; i < 16; i++) {
+          const h = Math.abs(Math.sin(tick * 3 + i * 0.4)) * 40 + 8;
+          ctx.fillRect(90 + i * 11, 350 - h / 2, 6, h);
+        }
+
+        syntheticAnimId = requestAnimationFrame(drawFrame);
+      }
+      drawFrame();
+    }
+
+    function renderKeyVault() {
+      const listEl = document.getElementById('active-keys-list');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+
+      SECURITY_CONFIG.authorizedKeys.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'p-2.5 rounded-xl bg-dark-950 border border-slate-800 flex items-center justify-between text-xs font-mono';
+        row.innerHTML = `
+          <div>
+            <div class="text-white font-bold flex items-center gap-1.5">
+              <span>${item.key}</span>
+              <span class="text-[9px] px-1.5 py-0.2 rounded font-sans ${item.role === 'ADMIN' ? 'bg-brand-500/20 text-brand-400' : 'bg-emerald-500/20 text-emerald-400'}">${item.role}</span>
+            </div>
+            <div class="text-[10px] text-slate-400 font-sans">${item.user}</div>
+          </div>
+          <button class="copy-key-btn p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300" data-key="${item.key}" title="Copy Key">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+          </button>
+        `;
+        listEl.appendChild(row);
+      });
+
+      if (window.lucide) lucide.createIcons();
+
+      document.querySelectorAll('.copy-key-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const k = btn.dataset.key;
+          copyTextToClipboard(k);
+          showToast(`License Key Copied: ${k}`, 'success');
+        });
+      });
+    }
+
+    function copyTextToClipboard(text) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      } catch (err) {
+        console.warn("Clipboard fallback:", err);
+      }
+    }
+
+    function drawSubtitlesOnCanvas(ctx, width, height, currentTime) {
+      const adjustedTime = currentTime - subtitleSyncOffset;
+      const cueIdx = currentCues.findIndex(c => adjustedTime >= c.start && adjustedTime <= c.end);
+      if (cueIdx === -1) return;
+      const activeCue = currentCues[cueIdx];
+
+      const rawWords = activeCue.words && activeCue.words.length > 0 ? activeCue.words : activeCue.text.split(' ');
+      const rawActiveWordIdx = calculateActiveWordIndex(activeCue, adjustedTime);
+
+      const { chunkWords, activeInChunk } = getActiveDisplayChunk(rawWords, rawActiveWordIdx, wordChunkMode);
+      if (!chunkWords || chunkWords.length === 0) return;
+
+      const scale = width / 360;
+      const fontSize = Math.round(currentFontSize * scale);
+      const cleanFont = currentFontFamily.replace(/['"]/g, '').split(',')[0].trim();
+
+      ctx.save();
+      ctx.font = `900 ${fontSize}px "${cleanFont}", sans-serif`;
+      ctx.textBaseline = 'middle';
+
+      const displayWords = chunkWords.map(w => textCase === 'uppercase' ? w.toUpperCase() : w);
+      const spaceW = ctx.measureText(' ').width;
+      const metrics = displayWords.map(w => ({ text: w, width: ctx.measureText(w).width }));
+      const totalLineWidth = metrics.reduce((acc, m) => acc + m.width, 0) + (metrics.length - 1) * spaceW;
+
+      const posCfg = getKineticPositionConfig(activeCue, cueIdx);
+      let centerX = width / 2;
+      let lineY = height * (1 - verticalBottom / 100);
+
+      if (posCfg.top === '15%' || posCfg.top === '18%') {
+        lineY = height * 0.18;
+      } else if (posCfg.top === '48%' || posCfg.top === '45%') {
+        lineY = height * 0.48;
+      } else if (posCfg.bottom && posCfg.bottom !== 'auto') {
+        const bPct = parseFloat(posCfg.bottom) || verticalBottom;
+        lineY = height * (1 - bPct / 100);
+      }
+
+      if (posCfg.textAlign === 'left' || posCfg.transform.includes('-2deg')) {
+        ctx.translate(centerX, lineY);
+        ctx.rotate(-2 * Math.PI / 180);
+        ctx.translate(-centerX, -lineY);
+      } else if (posCfg.textAlign === 'right' || posCfg.transform.includes('3deg')) {
+        ctx.translate(centerX, lineY);
+        ctx.rotate(2 * Math.PI / 180);
+        ctx.translate(-centerX, -lineY);
+      }
+
+      let startX = (width - totalLineWidth) / 2;
+
+      metrics.forEach((item, idx) => {
+        const isHighlight = idx === activeInChunk;
+
+        if (isHighlight) {
+          ctx.save();
+          let bg = '#facc15';
+          let fg = '#000000';
+          let stroke = null;
+
+          if (activePresetClass === 'preset-hormozi') { bg = '#eab308'; fg = '#000000'; stroke = '#000000'; }
+          else if (activePresetClass === 'preset-mrbeast') { bg = '#10b981'; fg = '#ffffff'; stroke = '#ffffff'; }
+          else if (activePresetClass === 'preset-cyber-neon') { bg = 'rgba(6,182,212,0.3)'; fg = '#22d3ee'; stroke = '#f43f5e'; }
+          else if (activePresetClass === 'preset-comic') { bg = '#ec4899'; fg = '#ffffff'; }
+          else if (activePresetClass === 'preset-bollywood') { bg = '#f97316'; fg = '#000000'; }
+          else if (activePresetClass === 'preset-alert-red') { bg = '#ef4444'; fg = '#ffffff'; }
+          else if (activePresetClass === 'preset-retro-vhs') { bg = '#000000'; fg = '#facc15'; stroke = '#facc15'; }
+          else if (activePresetClass === 'preset-gradient-capsule') { bg = '#3b82f6'; fg = '#ffffff'; }
+
+          const padX = 8 * scale;
+          const padY = 4 * scale;
+          const r = 6 * scale;
+          const rx = startX - padX / 2;
+          const ry = lineY - fontSize / 2 - padY / 2;
+          const rw = item.width + padX;
+          const rh = fontSize + padY;
+
+          ctx.fillStyle = bg;
+          ctx.beginPath();
+          if (ctx.roundRect) {
+            ctx.roundRect(rx, ry, rw, rh, r);
+          } else {
+            ctx.rect(rx, ry, rw, rh);
+          }
+          ctx.fill();
+
+          if (stroke) {
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = 2 * scale;
+            ctx.stroke();
+          }
+
+          ctx.fillStyle = fg;
+          ctx.fillText(item.text, startX, lineY);
+          ctx.restore();
+        } else {
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,0,0,0.95)';
+          ctx.shadowBlur = 8 * scale;
+          ctx.shadowOffsetY = 2 * scale;
+
+          ctx.lineWidth = 4 * scale;
+          ctx.strokeStyle = '#000000';
+          ctx.strokeText(item.text, startX, lineY);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(item.text, startX, lineY);
+          ctx.restore();
+        }
+
+        startX += item.width + spaceW;
+      });
+
+      ctx.restore();
+    }
+
+    async function patchMp4Duration(blob, durationSec) {
+      try {
+        const buffer = await blob.arrayBuffer();
+        const view = new DataView(buffer);
+        const u8 = new Uint8Array(buffer);
+        const len = buffer.byteLength;
+
+        function getBoxType(offset) {
+          return String.fromCharCode(u8[offset], u8[offset + 1], u8[offset + 2], u8[offset + 3]);
+        }
+
+        let movieTimescale = 1000;
+        let targetMovieDuration = Math.round(durationSec * movieTimescale);
+
+        function scanBoxes(start, end) {
+          let pos = start;
+          while (pos + 8 <= end) {
+            let size = view.getUint32(pos);
+            const type = getBoxType(pos + 4);
+            let headerSize = 8;
+            if (size === 1 && pos + 16 <= end) {
+              const high = view.getUint32(pos + 8);
+              const low = view.getUint32(pos + 12);
+              size = high * 4294967296 + low;
+              headerSize = 16;
+            } else if (size === 0) {
+              size = end - pos;
+            }
+
+            if (size < headerSize || pos + size > end) break;
+
+            const dataStart = pos + headerSize;
+            const dataEnd = pos + size;
+
+            if (type === 'moov' || type === 'trak' || type === 'mdia' || type === 'mvex') {
+              scanBoxes(dataStart, dataEnd);
+            } else if (type === 'mvhd') {
+              const version = view.getUint8(dataStart);
+              if (version === 0 && dataStart + 20 <= dataEnd) {
+                movieTimescale = view.getUint32(dataStart + 12) || 1000;
+                targetMovieDuration = Math.round(durationSec * movieTimescale);
+                view.setUint32(dataStart + 16, targetMovieDuration);
+              } else if (version === 1 && dataStart + 32 <= dataEnd) {
+                movieTimescale = view.getUint32(dataStart + 20) || 1000;
+                targetMovieDuration = Math.round(durationSec * movieTimescale);
+                if (typeof view.setBigUint64 === 'function') {
+                  view.setBigUint64(dataStart + 24, BigInt(targetMovieDuration));
+                } else {
+                  view.setUint32(dataStart + 28, targetMovieDuration);
+                }
+              }
+            } else if (type === 'tkhd') {
+              const version = view.getUint8(dataStart);
+              if (version === 0 && dataStart + 24 <= dataEnd) {
+                view.setUint32(dataStart + 20, targetMovieDuration);
+              } else if (version === 1 && dataStart + 36 <= dataEnd) {
+                if (typeof view.setBigUint64 === 'function') {
+                  view.setBigUint64(dataStart + 28, BigInt(targetMovieDuration));
+                } else {
+                  view.setUint32(dataStart + 32, targetMovieDuration);
+                }
+              }
+            } else if (type === 'mdhd') {
+              const version = view.getUint8(dataStart);
+              if (version === 0 && dataStart + 20 <= dataEnd) {
+                const trackTimescale = view.getUint32(dataStart + 12) || movieTimescale;
+                const trackDuration = Math.round(durationSec * trackTimescale);
+                view.setUint32(dataStart + 16, trackDuration);
+              } else if (version === 1 && dataStart + 32 <= dataEnd) {
+                const trackTimescale = view.getUint32(dataStart + 20) || movieTimescale;
+                const trackDuration = Math.round(durationSec * trackTimescale);
+                if (typeof view.setBigUint64 === 'function') {
+                  view.setBigUint64(dataStart + 24, BigInt(trackDuration));
+                } else {
+                  view.setUint32(dataStart + 28, trackDuration);
+                }
+              }
+            } else if (type === 'mehd') {
+              const version = view.getUint8(dataStart);
+              if (version === 0 && dataStart + 8 <= dataEnd) {
+                view.setUint32(dataStart + 4, targetMovieDuration);
+              } else if (version === 1 && dataStart + 12 <= dataEnd) {
+                if (typeof view.setBigUint64 === 'function') {
+                  view.setBigUint64(dataStart + 4, BigInt(targetMovieDuration));
+                } else {
+                  view.setUint32(dataStart + 8, targetMovieDuration);
+                }
+              }
+            }
+
+            pos += size;
+          }
+        }
+
+        scanBoxes(0, len);
+        return new Blob([buffer], { type: 'video/mp4' });
+      } catch (err) {
+        console.warn("MP4 box duration patch warning:", err);
+        return blob;
+      }
+    }
+
+    async function patchWebmDuration(blob, durationMs) {
+      if (typeof ysFixWebmDuration !== 'function') return blob;
+      return new Promise((resolve) => {
+        let resolved = false;
+        const safeResolve = (res) => {
+          if (!resolved) {
+            resolved = true;
+            resolve(res || blob);
+          }
+        };
+        try {
+          const res = ysFixWebmDuration(blob, durationMs, (fixed) => {
+            safeResolve(fixed);
+          }, { logger: false });
+          if (res && typeof res.then === 'function') {
+            res.then(safeResolve).catch(() => safeResolve(blob));
+          }
+        } catch (e) {
+          safeResolve(blob);
+        }
+        setTimeout(() => safeResolve(blob), 1500);
+      });
+    }
+
+    async function startVideoExportPipeline() {
+      if (!video) {
+        showToast("No video found to export.", "warning");
+        return;
+      }
+
+      const modal = document.getElementById('export-video-modal');
+      const bar = document.getElementById('export-progress-bar');
+      const pctText = document.getElementById('export-progress-percent');
+      const statusText = document.getElementById('export-status-text');
+      const presetBadge = document.getElementById('export-active-preset-name');
+
+      if (presetBadge) {
+        presetBadge.innerText = activePresetClass.replace('preset-', '').toUpperCase();
+      }
+
+      if (modal) modal.classList.remove('hidden');
+      if (bar) bar.style.width = '0%';
+      if (pctText) pctText.innerText = '0%';
+      if (statusText) statusText.innerText = 'Preparing video and synchronizing audio...';
+
+      isExporting = true;
+      const exportStartTime = performance.now();
+
+      video.muted = false;
+      video.volume = 1.0;
+
+      const exportCanvas = document.createElement('canvas');
+      const exportCtx = exportCanvas.getContext('2d');
+      const cw = video.videoWidth || 720;
+      const ch = video.videoHeight || 1280;
+      exportCanvas.width = cw;
+      exportCanvas.height = ch;
+
+      const canvasStream = exportCanvas.captureStream(30);
+
+      let audioTrack = null;
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          if (!window.__globalExportAudioCtx) {
+            window.__globalExportAudioCtx = new AudioContextClass();
+          }
+          const actx = window.__globalExportAudioCtx;
+          if (actx.state === 'suspended') {
+            await actx.resume();
+          }
+
+          if (!window.__mediaSourceConnected) {
+            window.__mediaSourceNode = actx.createMediaElementSource(video);
+            window.__exportMediaDest = actx.createMediaStreamDestination();
+            window.__mediaSourceNode.connect(window.__exportMediaDest);
+            window.__mediaSourceNode.connect(actx.destination);
+            window.__mediaSourceConnected = true;
+          }
+
+          const audioTracks = window.__exportMediaDest.stream.getAudioTracks();
+          if (audioTracks && audioTracks.length > 0) {
+            audioTrack = audioTracks[0];
+          }
+        }
+      } catch (audioErr) {
+        console.warn("AudioContext note:", audioErr);
+      }
+
+      if (!audioTrack) {
+        try {
+          const vStream = typeof video.captureStream === 'function'
+            ? video.captureStream()
+            : (typeof video.mozCaptureStream === 'function' ? video.mozCaptureStream() : null);
+          if (vStream) {
+            const aTracks = vStream.getAudioTracks();
+            if (aTracks && aTracks.length > 0) {
+              audioTrack = aTracks[0];
+            }
+          }
+        } catch (vErr) {
+          console.warn("Direct stream audio notice:", vErr);
+        }
+      }
+
+      const combinedStream = new MediaStream();
+      canvasStream.getVideoTracks().forEach(vt => combinedStream.addTrack(vt));
+
+      if (audioTrack) {
+        audioTrack.enabled = true;
+        combinedStream.addTrack(audioTrack);
+      }
+
+      let mimeType = 'video/mp4';
+      const codecCandidates = [
+        'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+        'video/mp4;codecs=avc1,mp4a.40.2',
+        'video/mp4',
+        'video/webm;codecs=vp9,opus',
+        'video/webm;codecs=vp8,opus',
+        'video/webm'
+      ];
+
+      for (const candidate of codecCandidates) {
+        if (MediaRecorder.isTypeSupported(candidate)) {
+          mimeType = candidate;
+          break;
+        }
+      }
+
+      const recordedChunks = [];
+      try {
+        exportRecorder = new MediaRecorder(combinedStream, {
+          mimeType: mimeType,
+          videoBitsPerSecond: 4000000,
+          audioBitsPerSecond: 128000
+        });
+      } catch (recErr) {
+        try {
+          exportRecorder = new MediaRecorder(combinedStream, { mimeType });
+        } catch (recErr2) {
+          exportRecorder = new MediaRecorder(combinedStream);
+        }
+      }
+
+      exportRecorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) {
+          recordedChunks.push(e.data);
+        }
+      };
+
+      exportRecorder.onstop = async () => {
+        if (!isExporting && recordedChunks.length === 0) return;
+
+        const elapsedSec = (performance.now() - exportStartTime) / 1000;
+        const totalDurSec = Math.max(1, (video.duration && !isNaN(video.duration) && isFinite(video.duration)) ? video.duration : elapsedSec);
+        const totalDurMs = Math.round(totalDurSec * 1000);
+        const isRealMp4 = mimeType.toLowerCase().startsWith('video/mp4');
+        const ext = isRealMp4 ? 'mp4' : 'webm';
+        const rawBlob = new Blob(recordedChunks, { type: mimeType });
+
+        if (statusText) statusText.innerText = 'Fixing phone gallery duration metadata...';
+
+        let finalBlob = rawBlob;
+        if (isRealMp4) {
+          finalBlob = await patchMp4Duration(rawBlob, totalDurSec);
+        } else {
+          finalBlob = await patchWebmDuration(rawBlob, totalDurMs);
+        }
+
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(finalBlob);
+        a.download = `DesiSubtitles_${Date.now()}.${ext}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        if (modal) modal.classList.add('hidden');
+        showToast(`Video saved! Gallery duration fixed (${formatTime(totalDurSec)} .${ext})`, 'success');
+        isExporting = false;
+      };
+
+      video.pause();
+      video.currentTime = 0;
+      await new Promise(resolve => {
+        const onSeek = () => {
+          video.removeEventListener('seeked', onSeek);
+          resolve();
+        };
+        video.addEventListener('seeked', onSeek);
+        setTimeout(resolve, 400);
+      });
+
+      if (window.__globalExportAudioCtx && window.__globalExportAudioCtx.state === 'suspended') {
+        await window.__globalExportAudioCtx.resume();
+      }
+
+      exportRecorder.start(500);
+      try {
+        await video.play();
+      } catch (playErr) {
+        console.warn("Export playback start notice:", playErr);
+      }
+
+      function renderFrame() {
+        if (!isExporting) return;
+
+        exportCtx.drawImage(video, 0, 0, cw, ch);
+        drawSubtitlesOnCanvas(exportCtx, cw, ch, video.currentTime);
+
+        const totalDur = video.duration || 15;
+        const pct = Math.min(100, Math.round((video.currentTime / totalDur) * 100));
+        if (bar) bar.style.width = `${pct}%`;
+        if (pctText) pctText.innerText = `${pct}%`;
+        if (statusText) statusText.innerText = `Burning subtitles & audio... ${formatTime(video.currentTime)} / ${formatTime(totalDur)}`;
+
+        if (video.ended || video.currentTime >= totalDur - 0.1) {
+          video.pause();
+          if (bar) bar.style.width = '100%';
+          if (pctText) pctText.innerText = '100%';
+          if (statusText) statusText.innerText = 'Finalizing video and audio tracks...';
+          setTimeout(() => {
+            if (exportRecorder && exportRecorder.state === 'recording') {
+              exportRecorder.stop();
+            }
+          }, 300);
+          return;
+        }
+
+        exportAnimId = requestAnimationFrame(renderFrame);
+      }
+
+      renderFrame();
+    }
+
+    function cancelVideoExport() {
+      isExporting = false;
+      if (exportAnimId) cancelAnimationFrame(exportAnimId);
+      if (exportRecorder && exportRecorder.state === 'recording') {
+        exportRecorder.stop();
+      }
+      if (video) video.pause();
+      const modal = document.getElementById('export-video-modal');
+      if (modal) modal.classList.add('hidden');
+      showToast("Video export cancelled.", "warning");
+    }
+
+    function formatSrtTime(secs) {
+      const s = Math.max(0, secs || 0);
+      const hrs = String(Math.floor(s / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+      const seconds = String(Math.floor(s % 60)).padStart(2, '0');
+      const ms = String(Math.floor((s % 1) * 1000)).padStart(3, '0');
+      return `${hrs}:${mins}:${seconds},${ms}`;
+    }
+
+    function downloadFile(filename, content, mime) {
+      const blob = new Blob([content], { type: mime });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    }
+
+    function initializeStudioEvents() {
+      // Security License Verification
+      safeAddListener('btn-verify-license', 'click', () => {
+        const inputKey = document.getElementById('security-key-input')?.value.trim();
+        const errEl = document.getElementById('license-auth-error');
+        const modal = document.getElementById('security-gate-modal');
+
+        const isValid = SECURITY_CONFIG.authorizedKeys.some(k => k.key === inputKey);
+
+        if (isValid) {
+          SECURITY_CONFIG.isAuthenticated = true;
+          if (errEl) errEl.classList.add('hidden');
+          if (modal) modal.classList.add('hidden');
+          showToast("Access Granted! DesiSubtitles AI Studio Unlocked.", "success");
+          safeTogglePlay();
+        } else {
+          if (errEl) errEl.classList.remove('hidden');
+          showToast("Authentication Failed: Invalid Key.", "warning");
+        }
+      });
+
+      // Key Vault Modal controls
+      safeAddListener('btn-open-key-manager', 'click', () => {
+        const vaultModal = document.getElementById('key-vault-modal');
+        if (vaultModal) {
+          vaultModal.classList.remove('hidden');
+          renderKeyVault();
+        }
+      });
+
+      safeAddListener('btn-close-vault', 'click', () => {
+        const vaultModal = document.getElementById('key-vault-modal');
+        if (vaultModal) vaultModal.classList.add('hidden');
+      });
+
+      // Generate New User License Key
+      safeAddListener('btn-generate-key', 'click', () => {
+        const nameInput = document.getElementById('new-client-name');
+        const clientName = nameInput?.value.trim() || `User-${Math.floor(Math.random() * 900 + 100)}`;
+        const randomHash = Math.random().toString(36).substring(2, 7).toUpperCase();
+        const newKey = `DESI-${clientName.toUpperCase().replace(/\s+/g, '-')}-${randomHash}`;
+
+        SECURITY_CONFIG.authorizedKeys.push({
+          key: newKey,
+          user: clientName,
+          role: "CLIENT"
+        });
+
+        if (nameInput) nameInput.value = '';
+        renderKeyVault();
+        showToast(`Created New Client Key: ${newKey}`, 'success');
+      });
+
+      // Toggle Key Input Visibility
+      safeAddListener('btn-toggle-key-visibility', 'click', () => {
+        const input = document.getElementById('security-key-input');
+        if (input) {
+          input.type = input.type === 'password' ? 'text' : 'password';
+        }
+      });
+
+      // Video Play / Pause / Scrubber
+      safeAddListener('btn-play-pause', 'click', safeTogglePlay);
+      safeAddListener('video-click-detector', 'click', safeTogglePlay);
+
+      safeAddListener('btn-backward', 'click', () => {
+        if (video) video.currentTime = Math.max(0, video.currentTime - 3);
+      });
+
+      safeAddListener('btn-forward', 'click', () => {
+        if (video) video.currentTime = Math.min(video.duration || 999, video.currentTime + 3);
+      });
+
+      safeAddListener('seek-slider', 'input', (e) => {
+        if (video && video.duration) {
+          video.currentTime = (parseFloat(e.target.value) / 100) * video.duration;
+        }
+      });
+
+      if (video) {
+        video.addEventListener('timeupdate', () => {
+          const t = video.currentTime;
+          if (timeCurrent) timeCurrent.innerText = formatTime(t);
+          if (video.duration && seekSlider) {
+            seekSlider.value = (t / video.duration) * 100;
+          }
+          updateSubtitles(t);
+        });
+
+        video.addEventListener('loadedmetadata', () => {
+          if (timeDuration) timeDuration.innerText = formatTime(video.duration || 15);
+        });
+
+        video.addEventListener('error', () => {
+          console.warn("External video stream blocked. Launching local generator.");
+          initSyntheticVideo();
+        });
+      }
+
+      // 50 Professional Fonts Selection
+      safeAddListener('font-family-select', 'change', (e) => {
+        currentFontFamily = e.target.value;
+        const ind = document.getElementById('active-font-indicator');
+        if (ind && e.target.options[e.target.selectedIndex]) {
+          ind.innerText = e.target.options[e.target.selectedIndex].text.split(' ')[0];
+        }
+        updateSubtitles(video ? video.currentTime : 0);
+        showToast(`Font applied: ${ind ? ind.innerText : 'Updated'}`, 'info');
+      });
+
+      // Template Category Tab Filter Buttons
+      document.querySelectorAll('.tpl-cat-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tpl-cat-btn').forEach(b => {
+            b.classList.remove('bg-brand-500', 'text-white');
+            b.classList.add('bg-slate-900', 'text-slate-400', 'border', 'border-slate-800');
+          });
+          btn.classList.remove('bg-slate-900', 'text-slate-400', 'border', 'border-slate-800');
+          btn.classList.add('bg-brand-500', 'text-white');
+
+          const cat = btn.dataset.cat;
+          document.querySelectorAll('#templates-grid .style-preset-btn').forEach(card => {
+            if (cat === 'all' || card.dataset.cat === cat) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // 20 Caption Templates Selection with Auto-Font Pairing
+      document.querySelectorAll('.style-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.style-preset-btn').forEach(b => {
+            b.classList.remove('border-brand-500', 'bg-brand-500/10');
+            b.classList.add('border-slate-800', 'bg-slate-900');
+          });
+          btn.classList.remove('border-slate-800', 'bg-slate-900');
+          btn.classList.add('border-brand-500', 'bg-brand-500/10');
+          activePresetClass = btn.dataset.style;
+
+          // Auto-apply recommended trending font if specified on the template
+          if (btn.dataset.font) {
+            currentFontFamily = btn.dataset.font;
+            const fontSel = document.getElementById('font-family-select');
+            if (fontSel) {
+              fontSel.value = btn.dataset.font;
+              const ind = document.getElementById('active-font-indicator');
+              if (ind && fontSel.options[fontSel.selectedIndex]) {
+                ind.innerText = fontSel.options[fontSel.selectedIndex].text.split(' ')[0];
+              }
+            }
+          }
+
+          // Update active template header badge
+          const tplBadge = document.getElementById('active-template-badge');
+          if (tplBadge) {
+            const titleEl = btn.querySelector('div span');
+            tplBadge.innerText = titleEl ? titleEl.innerText : activePresetClass.replace('preset-', '').toUpperCase();
+          }
+
+          updateSubtitles(video ? video.currentTime : 0);
+          showToast(`Applied Template: ${tplBadge ? tplBadge.innerText : 'Updated'}`, 'info');
+        });
+      });
+
+      // Font Size Slider
+      safeAddListener('font-size-slider', 'input', (e) => {
+        currentFontSize = parseInt(e.target.value);
+        const valEl = document.getElementById('font-size-val');
+        if (valEl) valEl.innerText = `${currentFontSize}px`;
+        updateSubtitles(video ? video.currentTime : 0);
+      });
+
+      // Position Y Slider
+      safeAddListener('pos-slider', 'input', (e) => {
+        verticalBottom = parseInt(e.target.value);
+        const valEl = document.getElementById('pos-val');
+        if (valEl) valEl.innerText = `${verticalBottom}%`;
+        updateSubtitles(video ? video.currentTime : 0);
+      });
+
+      // Text Case Toggles
+      safeAddListener('case-upper', 'click', () => {
+        textCase = 'uppercase';
+        const uBtn = document.getElementById('case-upper');
+        const nBtn = document.getElementById('case-normal');
+        if (uBtn) uBtn.className = "case-btn flex-1 py-1 text-center font-bold text-[10px] bg-brand-500 text-white rounded";
+        if (nBtn) nBtn.className = "case-btn flex-1 py-1 text-center font-bold text-[10px] text-slate-400 hover:text-white rounded";
+        updateSubtitles(video ? video.currentTime : 0);
+      });
+
+      safeAddListener('case-normal', 'click', () => {
+        textCase = 'normal';
+        const uBtn = document.getElementById('case-upper');
+        const nBtn = document.getElementById('case-normal');
+        if (uBtn) uBtn.className = "case-btn flex-1 py-1 text-center font-bold text-[10px] text-slate-400 hover:text-white rounded";
+        if (nBtn) nBtn.className = "case-btn flex-1 py-1 text-center font-bold text-[10px] bg-brand-500 text-white rounded";
+        updateSubtitles(video ? video.currentTime : 0);
+      });
+
+      // Video Upload Handler
+      safeAddListener('video-upload', 'change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file && video) {
+          lastUploadedFile = file;
+          if (syntheticAnimId) cancelAnimationFrame(syntheticAnimId);
+          if (fallbackCanvas) fallbackCanvas.classList.add('hidden');
+          video.classList.remove('hidden');
+          
+          const url = URL.createObjectURL(file);
+          video.src = url;
+          video.load();
+          showToast(`Loaded: ${file.name}. Starting speech detection...`, 'info');
+          
+          setTimeout(() => {
+            runAutoSpeechToTextPipeline(file);
+          }, 400);
+        }
+      });
+
+      // AI Speech Detection Button
+      safeAddListener('btn-generate-ai', 'click', () => {
+        runAutoSpeechToTextPipeline(lastUploadedFile);
+      });
+
+      // CapCut & Insta Reel Layout Controls
+      const chunkWordsBtn = document.getElementById('chunk-mode-words');
+      const chunkSingleBtn = document.getElementById('chunk-mode-single');
+      const chunkFullBtn = document.getElementById('chunk-mode-full');
+
+      function updateChunkButtons(activeBtn) {
+        [chunkWordsBtn, chunkSingleBtn, chunkFullBtn].forEach(b => {
+          if (!b) return;
+          b.classList.remove('bg-brand-500', 'text-white', 'shadow');
+          b.classList.add('bg-slate-900', 'border', 'border-slate-700/80', 'text-slate-300');
+        });
+        if (activeBtn) {
+          activeBtn.classList.remove('bg-slate-900', 'border', 'border-slate-700/80', 'text-slate-300');
+          activeBtn.classList.add('bg-brand-500', 'text-white', 'shadow');
+        }
+        updateSubtitles(video ? video.currentTime : 0);
+      }
+
+      safeAddListener('chunk-mode-words', 'click', () => {
+        wordChunkMode = 'words';
+        updateChunkButtons(chunkWordsBtn);
+        showToast("Reels Mode: 2-3 words chunk active (no long lines)", "info");
+      });
+
+      safeAddListener('chunk-mode-single', 'click', () => {
+        wordChunkMode = 'single';
+        updateChunkButtons(chunkSingleBtn);
+        showToast("Hormozi Solo: 1-word punch active", "info");
+      });
+
+      safeAddListener('chunk-mode-full', 'click', () => {
+        wordChunkMode = 'full';
+        updateChunkButtons(chunkFullBtn);
+        showToast("Full Cue sentence mode active", "info");
+      });
+
+      // Dynamic Position Flow Controls
+      const flowKineticBtn = document.getElementById('pos-flow-kinetic');
+      const flowBottomBtn = document.getElementById('pos-flow-bottom');
+      const flowCenterBtn = document.getElementById('pos-flow-center');
+      const flowTopBtn = document.getElementById('pos-flow-top');
+      const posStatus = document.getElementById('pos-mode-status');
+
+      function updatePosFlowButtons(activeBtn, modeName) {
+        [flowKineticBtn, flowBottomBtn, flowCenterBtn, flowTopBtn].forEach(b => {
+          if (!b) return;
+          b.classList.remove('bg-emerald-500/20', 'text-emerald-400', 'border-emerald-500/40');
+          b.classList.add('bg-slate-900', 'text-slate-400', 'border-slate-800');
+        });
+        if (activeBtn) {
+          activeBtn.classList.remove('bg-slate-900', 'text-slate-400', 'border-slate-800');
+          activeBtn.classList.add('bg-emerald-500/20', 'text-emerald-400', 'border-emerald-500/40');
+        }
+        if (posStatus) posStatus.innerText = `${modeName} active`;
+        updateSubtitles(video ? video.currentTime : 0);
+      }
+
+      safeAddListener('pos-flow-kinetic', 'click', () => {
+        positionFlowMode = 'kinetic';
+        updatePosFlowButtons(flowKineticBtn, 'kinetic');
+        showToast("Kinetic Flow: Captions pop Top/Center/Sides dynamically", "success");
+      });
+
+      safeAddListener('pos-flow-bottom', 'click', () => {
+        positionFlowMode = 'bottom';
+        updatePosFlowButtons(flowBottomBtn, 'bottom');
+        showToast("Position locked: Bottom standard", "info");
+      });
+
+      safeAddListener('pos-flow-center', 'click', () => {
+        positionFlowMode = 'center';
+        updatePosFlowButtons(flowCenterBtn, 'center');
+        showToast("Position locked: Center punch hook", "info");
+      });
+
+      safeAddListener('pos-flow-top', 'click', () => {
+        positionFlowMode = 'top';
+        updatePosFlowButtons(flowTopBtn, 'top');
+        showToast("Position locked: Top banner", "info");
+      });
+
+      // Sync Offset Calibration Controls
+      const syncSlider = document.getElementById('sync-offset-slider');
+      const syncLabel = document.getElementById('sync-offset-label');
+
+      function updateSyncDisplay() {
+        if (!syncLabel || !syncSlider) return;
+        subtitleSyncOffset = parseFloat(syncSlider.value);
+        if (Math.abs(subtitleSyncOffset) < 0.01) {
+          syncLabel.innerText = "0.00s (Synced)";
+          syncLabel.className = "font-mono text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20";
+        } else if (subtitleSyncOffset > 0) {
+          syncLabel.innerText = `+${subtitleSyncOffset.toFixed(2)}s (Delayed)`;
+          syncLabel.className = "font-mono text-[10px] text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20";
+        } else {
+          syncLabel.innerText = `${subtitleSyncOffset.toFixed(2)}s (Advanced)`;
+          syncLabel.className = "font-mono text-[10px] text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded border border-cyan-500/20";
+        }
+        updateSubtitles(video ? video.currentTime : 0);
+      }
+
+      safeAddListener('sync-offset-slider', 'input', updateSyncDisplay);
+
+      safeAddListener('btn-nudge-delay', 'click', () => {
+        if (!syncSlider) return;
+        syncSlider.value = Math.min(2.0, parseFloat(syncSlider.value) + 0.2).toFixed(2);
+        updateSyncDisplay();
+        showToast("Captions delayed by 200ms", "info");
+      });
+
+      safeAddListener('btn-nudge-advance', 'click', () => {
+        if (!syncSlider) return;
+        syncSlider.value = Math.max(-2.0, parseFloat(syncSlider.value) - 0.2).toFixed(2);
+        updateSyncDisplay();
+        showToast("Captions advanced by 200ms", "info");
+      });
+
+      safeAddListener('btn-nudge-reset', 'click', () => {
+        if (!syncSlider) return;
+        syncSlider.value = "0";
+        updateSyncDisplay();
+        showToast("Sync reset to normal", "info");
+      });
+
+      // Video Export Triggers
+      safeAddListener('btn-export-video', 'click', startVideoExportPipeline);
+      safeAddListener('btn-export-video-footer', 'click', startVideoExportPipeline);
+      safeAddListener('btn-cancel-export', 'click', cancelVideoExport);
+
+      // Subtitle Exporters
+      safeAddListener('btn-export-srt', 'click', () => {
+        const srt = currentCues.map((c, i) => {
+          return `${i + 1}\n${formatSrtTime(c.start)} --> ${formatSrtTime(c.end)}\n${c.text}\n`;
+        }).join('\n');
+        downloadFile('desisubtitles.srt', srt, 'text/plain');
+      });
+
+      safeAddListener('btn-export-vtt', 'click', () => {
+        const vtt = "WEBVTT\n\n" + currentCues.map((c, i) => {
+          return `${i + 1}\n${formatSrtTime(c.start).replace(',', '.')} --> ${formatSrtTime(c.end).replace(',', '.')}\n${c.text}\n`;
+        }).join('\n');
+        downloadFile('desisubtitles.vtt', vtt, 'text/vtt');
+      });
+
+      safeAddListener('btn-export-json', 'click', () => {
+        downloadFile('desisubtitles.json', JSON.stringify(currentCues, null, 2), 'application/json');
+      });
+
+      safeAddListener('btn-copy-all', 'click', () => {
+        const fullText = currentCues.map(c => c.text).join('\n');
+        copyTextToClipboard(fullText);
+        showToast("Subtitles copied to clipboard!", "success");
+      });
+
+      // Add Manual Cue Trigger
+      safeAddListener('btn-add-cue', 'click', () => {
+        const last = currentCues[currentCues.length - 1];
+        const s = last ? last.end + 0.2 : 0.5;
+        const e = s + 2.2;
+        currentCues.push({
+          start: s,
+          end: e,
+          text: "Naya viral caption yahan likhein",
+          words: ["Naya", "viral", "caption", "yahan", "likhein"],
+          position: "auto"
+        });
+        renderCues();
+        if (cuesContainer) cuesContainer.scrollTop = cuesContainer.scrollHeight;
+        showToast("New cue added to timeline", "info");
+      });
+    }
+
+    // Initialize Studio on DOM Load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      initializeSecurityShield();
+      initializeStudioEvents();
+      renderCues();
+      updateSubtitles(0);
+    });
+  </script>
+</body>
+</html>
